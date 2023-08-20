@@ -5,7 +5,7 @@ import (
 	"database/sql"
 	"time"
 
-	"github.com/Raihanpoke/fullstack/database"
+	"github.com/Raihanpoke/fullstack/config"
 )
 
 type UserModel struct {
@@ -13,7 +13,7 @@ type UserModel struct {
 }
 
 func NewUserModel() *UserModel {
-	conn, err := database.DBSet()
+	conn, err := config.DBConnection()
 	if err != nil {
 		panic(err)
 	}
@@ -23,11 +23,11 @@ func NewUserModel() *UserModel {
 	}
 }
 
-func (u UserModel) Create(user User) (int64, error) {
+func (u UserModel) Create(user entities.user) (int64, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 100*time.Second)
 	defer cancel()
 
-	query := "INSERT INTO users(first_name, last_name, email, password, phone, user_id) VALUE(?,?,?,?,?,?)"
+	query := "INSERT INTO users(first_name, last_name, email, password, phone) VALUE(?,?,?,?,?)"
 	result, err := u.db.ExecContext(ctx, query, user.First_Name, user.Last_Name, user.Email, user.Password, user.Phone)
 	if err != nil {
 		return 0, err
