@@ -8,7 +8,7 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 )
 
-func DBConenection() (*sql.DB, error) {
+func DBConnection() (*sql.DB, error) {
 	dbDriver := "mysql"
 	dbUser := "root"
 	dbPass := "0987"

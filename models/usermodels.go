@@ -3,9 +3,9 @@ package models
 import (
 	"context"
 	"database/sql"
-	"time"
 
 	"github.com/Raihanpoke/fullstack/config"
+	"github.com/Raihanpoke/fullstack/entities"
 )
 
 type UserModel struct {
@@ -23,12 +23,21 @@ func NewUserModel() *UserModel {
 	}
 }
 
-func (u UserModel) Create(user entities.user) (int64, error) {
-	ctx, cancel := context.WithTimeout(context.Background(), 100*time.Second)
-	defer cancel()
+// func (um UserModel) Where(user entities.User) (int64, error) {
+// 	ctx := context.Background()
 
-	query := "INSERT INTO users(first_name, last_name, email, password, phone) VALUE(?,?,?,?,?)"
-	result, err := u.db.ExecContext(ctx, query, user.First_Name, user.Last_Name, user.Email, user.Password, user.Phone)
+// 	query := "SELECT *FROM users WHERE email = ?, password = ?"
+// 	result, err := um.db.ExecContext(ctx, query, user.Email, user.Password)
+// 	if err != nil {
+// 		panic(err)
+// 	}
+// }
+
+func (um UserModel) Create(user entities.User) (int64, error) {
+	ctx := context.Background()
+
+	query := "INSERT INTO users(id, first_name, last_name, email, password, phone, created_at, updated_at) VALUE(?,?,?,?,?,?,?,?)"
+	result, err := um.db.ExecContext(ctx, query, user.ID, user.First_Name, user.Last_Name, user.Email, user.Password, user.Phone, user.Created_At, user.Updated_At)
 	if err != nil {
 		return 0, err
 	}
